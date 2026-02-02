@@ -1,17 +1,16 @@
 [project]
-name = "week-01-docker-terraform"
+name = "pipeline"
 version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
     "pandas>=3.0.0",
-    "psycopg[binary]>=3.2.6",
+    "psycopg[binary,pool]>=3.3.2",
     "pyarrow>=23.0.0",
     "sqlalchemy>=2.0.46",
-    "tqdm>=4.67.1",
+    "tqdm>=4.67.2",
 ]
-
 
 [dependency-groups]
 dev = [
