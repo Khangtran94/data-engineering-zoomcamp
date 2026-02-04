@@ -1,0 +1,20 @@
+[project]
+name = "hw-week-01"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "click>=8.1.7",
+    "pandas>=2.2.0", # Pandas 3.0 is quite new; 2.2 is the stable Zoomcamp standard
+    "psycopg[binary,pool]>=3.2.0",
+    "pyarrow>=17.0.0", # Necessary for fast Parquet/CSV processing in Pandas
+    "sqlalchemy>=2.0.0",
+    "tqdm>=4.66.0",
+]
+
+[dependency-groups]
+dev = [
+    "jupyter>=1.1.1",
+    "pgcli>=4.1.0",
+]
