@@ -1,37 +1,9 @@
-#!/usr/bin/env python
-# coding: utf-8
-
-# In[73]:
-
-
 import pandas as pd
-# Read a sample of the data
-year = 2025
-month = 11
+from sqlalchemy import create_engine
+from tqdm.auto import tqdm
 
-prefix = 'https://github.com/DataTalksClub/nyc-tlc-data/releases/download/yellow/'
-df = pd.read_csv(prefix + 'yellow_tripdata_2021-01.csv.gz')
-
-# Display first rows
-df.head()
-
-
-# In[74]:
-
-
-df.dtypes
-
-
-# In[75]:
-
-
-df.shape
-
-
-# In[76]:
-
-
-dtype = {
+# Column dtypes
+DTYPE = {
     "VendorID": "Int64",
     "passenger_count": "Int64",
     "trip_distance": "float64",
@@ -50,56 +22,57 @@ dtype = {
     "congestion_surcharge": "float64"
 }
 
-parse_dates = [
+PARSE_DATES = [
     "tpep_pickup_datetime",
     "tpep_dropoff_datetime"
 ]
 
-df = pd.read_csv(
-    prefix + 'yellow_tripdata_2021-01.csv.gz',
-    # nrows=100,
-    dtype=dtype,
-    parse_dates=parse_dates
-)
-df
+
+def run():
+    # Postgres config
+    pg_user = "root"
+    pg_password = "root"
+    pg_host = "localhost"
+    pg_port = 5433
+    pg_db = "ny_taxi"
+
+    # Data config
+    year = 2021
+    month = 1
+    chunksize = 100_000
+    table_name = "yellow_taxi_data"
+
+    url_prefix = (
+        "https://github.com/DataTalksClub/nyc-tlc-data/"
+        "releases/download/yellow/"
+    )
+    url = f"{url_prefix}yellow_tripdata_{year:04d}-{month:02d}.csv.gz"
+
+    # DB engine
+    engine = create_engine(
+        f"postgresql+psycopg://{pg_user}:{pg_password}@{pg_host}:{pg_port}/{pg_db}"
+    )
+
+    # Read CSV in chunks
+    df_iter = pd.read_csv(
+        url,
+        dtype=DTYPE,
+        parse_dates=PARSE_DATES,
+        iterator=True,
+        chunksize=chunksize
+    )
+
+    for i, df_chunk in enumerate(tqdm(df_iter), start=1):
+        if_exists = "replace" if i == 1 else "append"
+
+        df_chunk.to_sql(
+            name=table_name,
+            con=engine,
+            if_exists=if_exists,
+            index=False,
+            method="multi"
+        )
 
 
-# In[77]:
-
-
-from sqlalchemy import create_engine
-engine = create_engine('postgresql+psycopg://root:root@localhost:5433/ny_taxi')
-engine
-
-
-# In[78]:
-
-
-print(pd.io.sql.get_schema(df, name='yellow_taxi_data', con=engine))
-
-
-# In[79]:
-
-
-df.head(n=0).to_sql(name='yellow_taxi_data', con=engine, if_exists='replace')
-
-
-# In[80]:
-
-
-df_iter = pd.read_csv(
-    prefix + 'yellow_tripdata_2021-01.csv.gz',
-    dtype=dtype,
-    parse_dates=parse_dates,
-    iterator=True,
-    chunksize=100000)
-df_iter
-
-
-# In[81]:
-
-
-from tqdm.auto import tqdm
-for df_chunk in tqdm(df_iter):
-    df_chunk.to_sql(name='yellow_taxi_data', con=engine, if_exists='replace')
-
+if __name__ == "__main__":
+    run()
