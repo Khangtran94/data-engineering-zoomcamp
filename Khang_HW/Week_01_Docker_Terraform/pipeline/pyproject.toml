@@ -1,19 +1,20 @@
 [project]
 name = "pipeline"
 version = "0.1.0"
-description = "Add your description here"
+description = "NYC Taxi Data Ingestion Pipeline"
 readme = "README.md"
-requires-python = ">=3.13"
+requires-python = ">=3.12" # 3.13 is very new; 3.12 has broader wheel support for DS libs
 dependencies = [
-    "pandas>=3.0.0",
-    "psycopg[binary,pool]>=3.3.2",
-    "pyarrow>=23.0.0",
-    "sqlalchemy>=2.0.46",
-    "tqdm>=4.67.2",
+    "click>=8.1.7",
+    "pandas>=2.2.0", # Pandas 3.0 is quite new; 2.2 is the stable Zoomcamp standard
+    "psycopg[binary,pool]>=3.2.0",
+    "pyarrow>=17.0.0", # Necessary for fast Parquet/CSV processing in Pandas
+    "sqlalchemy>=2.0.0",
+    "tqdm>=4.66.0",
 ]
 
 [dependency-groups]
 dev = [
     "jupyter>=1.1.1",
-    "pgcli>=4.4.0",
+    "pgcli>=4.1.0",
 ]
