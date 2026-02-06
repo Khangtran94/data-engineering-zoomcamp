@@ -59,7 +59,7 @@ No prior data engineering experience is necessary.
 - Workflow orchestration with Kestra
 - Homework
 
-#### [Workshop 1: Data Ingestion](cohorts/2025/workshops/dlt/README.md)
+#### [Workshop 1: Data Ingestion](cohorts/2026/workshops/dlt.md)
 - API reading and pipeline scalability
 - Data normalization and incremental loading
 - Homework
@@ -125,7 +125,6 @@ To keep discussions organized:
 - [Will Russell](https://www.linkedin.com/in/wrussell1999/)
 - [Anna Geller](https://www.linkedin.com/in/anna-geller-12a86811a/)
 - [Juan Manuel Perafan](https://www.linkedin.com/in/jmperafan/)
-- [Diana Gromakovskaia](https://www.linkedin.com/in/diana-gromakovskaia/)
 
 Past instructors:
 
