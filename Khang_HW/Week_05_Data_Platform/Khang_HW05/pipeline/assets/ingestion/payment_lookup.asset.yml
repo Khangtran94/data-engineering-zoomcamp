@@ -1,0 +1,23 @@
+
+name: ingestion.payment_lookup
+# seed asset loads a static CSV lookup table into DuckDB
+# the CSV file is located next to this asset definition
+
+type: duckdb.seed
+
+parameters:
+  path: payment_lookup.csv
+
+columns:
+  - name: payment_type_id
+    type: integer
+    description: "Numeric code for payment method"
+    primary_key: true
+    checks:
+      - name: not_null
+      - name: unique
+  - name: payment_type_name
+    type: string
+    description: "Human-readable payment method"
+    checks:
+      - name: not_null
